@@ -1,0 +1,10 @@
+/* 全てのCSSをまとめてエクスポート */
+
+@import "normalize.css";
+@import "../css/bootstrap-icons-1.10.5/font/bootstrap-icons.css";
+@import "add-friend.css";
+@import "add-group.css";
+@import "accept-friends.css";
+@import "add-public.css";
+@import "delete-public.css";
+@import "edit-public.css";

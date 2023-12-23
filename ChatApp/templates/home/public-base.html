@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/public-base.css" />
+    <link rel="stylesheet" href="../../static/css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>PUBLIC</title>
+  </head>
+  <body>
+    <div class="all-content">
+      <header>
+        <span class="return"><i class="bi bi-caret-left-fill"></i></span>
+        <div class="header-items">
+          <div class="left">
+            <span class="room_name">Public</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- フラッシュメッセージがある時にアラートを表示する -->
+      {% with messages = get_flashed_messages() %} {% for message in
+      get_flashed_messages() %}
+      <input type="hidden" id="flashMessage" value="{{message}}" />
+      {% endfor %} {% endwith %}
+
+      <div class="container">
+        <div class="sidebar">
+          
+        </div>
+
+        <div class="content">
+          <div class="talk">
+            <div class="all-public-channel">
+              {% for channel in channels %}
+              <div class="public-channel">
+                <a class="public-massage" href="public/{{ channel.id }}">
+                  <span>{{channel.channel_name}}</span>
+                </a>
+                <p class="public-option">
+                  <span class="channel-description">{{channel.abstract}}</span>
+                  {% if channel.user_id == user_id %}
+                  <span>
+                    <span
+                      onclick="editChannel({{channel.id}}, '{{channel.channel_name}}', '{{channel.abstract}}')"
+                      ><i class="bi bi-vector-pen"></i
+                    ></span>
+                    <span onclick="deleteChannel({{channel.id}})"
+                      ><i class="bi bi-trash3"></i
+                    ></span>
+                  </span>
+                  {% endif %}
+                </p>
+              </div>
+              {% endfor %}
+            </div>
+
+            <span class="public-open">
+              <button class="open-add-public" id="open-add-public">
+                <i class="bi bi-send-plus-fill plus-public"></i>
+              </button>
+            </span>
+          </div>
+
+          <div id="edit-modal" class="edit-modal">
+            <div class="edit-public-modal">
+              <div class="edit-public">
+                <div class="edit-modal-header">
+                  <i class="bi bi-people-fill edit-icon"></i>
+                  <h2>チャンネル修正</h2>
+                </div>
+                <div class="edit-container">
+                  <form
+                    id="edit-name"
+                    class="edit-name"
+                    action="/update_channel_public"
+                    method="POST"
+                  >
+                    <input
+                      name="editPublicName"
+                      class="edit-public-name"
+                      id="edit-public-name"
+                      type="text"
+                      placeholder="Channel Name"
+                    />
+                    <textarea
+                      name="editDescription"
+                      type="text"
+                      class="edit-description"
+                      id="editDescription"
+                      placeholder="チャンネルの説明を記入"
+                    ></textarea>
+                    <button type="submit" class="public-edit-button">
+                      修正
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="delete-public-modal" class="delete-public-modal">
+            <div class="delete-public-content">
+              <h1>チャンネル削除</h1>
+              <div class="delete-public-container">
+                <div class="delete-modal-body">
+                  <p>本当に消えます。</p>
+                  <p>よろしいですか？</p>
+                  <form
+                    action="/delete_channel_public"
+                    method="POST"
+                    id="public-channel-delete"
+                  >
+                    <button
+                      type="submit"
+                      class="delete-channel-confirmation-button"
+                    >
+                      削除
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="public-modal" class="public-modal">
+            <div class="plus-public-modal">
+              <div class="add-public-modal">
+                <div class="public-modal-header">
+                  <i class="bi bi-people-fill public-icon"></i>
+                  <h2>パブリックチャンネル</h2>
+                </div>
+                <div class="public-container">
+                  <form class="public-name" action="/public" method="POST">
+                    <input
+                      name="inputPublicName"
+                      class="input-public-name"
+                      type="text"
+                      placeholder="Channel Name"
+                    />
+                    <textarea
+                      name="publicDescription"
+                      type="text"
+                      class="public-description"
+                      placeholder="チャンネルの説明を記入"
+                    ></textarea>
+                    <button type="submit" class="public-add-button">
+                      追加
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note"></div>
+        </div>
+      </div>
+
+      <footer>
+        <a class="exit" href="{{ url_for('logout') }}"
+          ><i class="bi bi-box-arrow-left"></i
+        ></a>
+
+        <span class="room_kinds">
+          <a href="{{ url_for('home') }}" class="bi bi-person-fill"></a>
+          <a href="{{ url_for('group') }}" class="bi bi-people-fill"></a>
+          <a
+            href="{{ url_for('public') }}"
+            class="bi bi-globe-asia-australia"
+          ></a>
+        </span>
+      </footer>
+    </div>
+    <script type="text/javascript">
+      // prettier-ignore
+      const channels = JSON.parse('{{ channels|tojson }}');
+      // prettier-ignore
+      const user_id = JSON.parse('{{ user_id|tojson }}');
+    </script>
+
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/modalJS/add-public.js')}}"
+    ></script>
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/modalJS/delete-channel.js')}}"
+    ></script>
+
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/modalJS/edit-public.js')}}"
+    ></script>
+
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/flaskMessage.js')}}"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/public.css" />
+    <link rel="stylesheet" href="../../static/css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>PUBLIC</title>
+  </head>
+  <body>
+    <header>
+      <a href="{{ url_for('public') }}" class="return"
+        ><i class="bi bi-caret-left-fill"></i
+      ></a>
+      <div class="header-items">
+        <div class="left">
+          <span class="room_name">{{channel.channel_name}}</span>
+        </div>
+        <div class="right">
+          <input
+            class="search"
+            id="search_word"
+            type="text"
+            placeholder="search"
+            value=""
+          />
+          <button id="button_search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button id="delete_search">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="sidebar"></div>
+
+      <div class="content">
+        <div class="talk">
+          <div class="message-area" id="message-area">
+            <div class="messages">
+              {% if messages|length > 0 %} {% for message in messages %} {% if
+              message.user_id == user_id %}
+              <div class="my-messages">
+                <p class="box box-right">{{ message.content }}</p>
+                <form
+                  action="/delete_message_public"
+                  method="POST"
+                  class="delete-bottom"
+                >
+                  <input
+                    type="hidden"
+                    value="{{ channel.id }}"
+                    name="channel_id"
+                  />
+                  <button
+                    class="bi bi-trash3"
+                    name="message_id"
+                    value="{{ message.id }}"
+                  >
+                    <ion-icon
+                      name="trash-bin-outline"
+                      style="color: #122543"
+                    ></ion-icon>
+                  </button>
+                </form>
+                <form
+                  action="/post_message_public"
+                  method="POST"
+                  class="delete-bottom"
+                >
+                  <input
+                    type="hidden"
+                    value="{{ message.content }}"
+                    name="message"
+                  />
+                  <input
+                    type="hidden"
+                    value="{{ channel.id }}"
+                    name="channel_id"
+                  />
+                  <input type="hidden" value="1" name="message_type" />
+                  <button
+                    class="bi bi-book-half"
+                    name="message_id"
+                    value="{{ message.id }}"
+                  >
+                    <ion-icon
+                      name="trash-bin-outline"
+                      style="color: #122543"
+                    ></ion-icon>
+                  </button>
+                </form>
+              </div>
+              {% else %}
+              <div class="messages">
+                <p class="user-name">{{ message.user_name }}</p>
+                <div>
+                  <p class="box box-left">{{ message.content }}</p>
+                  <form
+                    action="/post_message_public"
+                    method="POST"
+                    class="delete-bottom"
+                  >
+                    <input
+                      type="hidden"
+                      value="{{ message.content }}"
+                      name="message"
+                    />
+                    <input
+                      type="hidden"
+                      value="{{ channel.id }}"
+                      name="channel_id"
+                    />
+                    <input type="hidden" value="1" name="message_type" />
+                    <button
+                      class="bi bi-book-half"
+                      name="message_id"
+                      value="{{ message.id }}"
+                    >
+                      <ion-icon
+                        name="trash-bin-outline"
+                        style="color: #122543"
+                      ></ion-icon>
+                    </button>
+                  </form>
+                </div>
+              </div>
+              {% endif %} {% endfor %} {% else %}
+              <div id="no-message"><p>まだメッセージがありません</p></div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="input-area">
+            <form
+              action="/post_message_public"
+              method="POST"
+              class="input-area-form"
+            >
+              <textarea
+                type="text"
+                name="message"
+                class="talk-input"
+                wrap="soft"
+              ></textarea>
+              <input type="hidden" value="{{ channel.id }}" name="channel_id" />
+              <input type="hidden" value="0" name="message_type" />
+              <button class="send-button">
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="note">
+          <div class="note-area" id="note-area">
+            <div class="notes">
+              {% if notes|length > 0 %}{% for note in notes %}{% if note.user_id
+              == user_id %}
+              <div class="my-note">
+                <p class="my-note-detail">{{ note.content }}</p>
+                <form
+                  action="/delete_message_public"
+                  method="POST"
+                  class="delete-bottom"
+                >
+                  <input
+                    type="hidden"
+                    value="{{ channel.id }}"
+                    name="channel_id"
+                  />
+                  <button
+                    class="bi bi-trash3"
+                    name="message_id"
+                    value="{{ note.id }}"
+                  >
+                    <ion-icon
+                      name="trash-bin-outline"
+                      style="color: #122543"
+                    ></ion-icon>
+                  </button>
+                </form>
+              </div>
+              {% else %}
+              <div class="your-note">
+                <p class="user-name">{{ note.user_name }}</p>
+                <p class="my-note-detail">{{ note.content }}</p>
+              </div>
+              {% endif %} {% endfor %} {% else %}
+              <div id="no-note"><p>まだノートがありません</p></div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="input-area">
+            <form
+              action="/post_message_public"
+              method="POST"
+              class="input-area-form"
+            >
+              <textarea
+                type="text"
+                name="message"
+                class="talk-input"
+                wrap="soft"
+              ></textarea>
+              <input type="hidden" value="{{ channel.id }}" name="channel_id" />
+              <input type="hidden" value="1" name="message_type" />
+              <button class="send-button">
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <a class="exit" href="{{ url_for('logout') }}"
+        ><i class="bi bi-box-arrow-left"></i
+      ></a>
+
+      <span class="room_kinds">
+        <a href="{{ url_for('home') }}" class="bi bi-person-fill"></a>
+        <a href="{{ url_for('group') }}" class="bi bi-people-fill"></a>
+        <a
+          href="{{ url_for('public') }}"
+          class="bi bi-globe-asia-australia"
+        ></a>
+      </span>
+    </footer>
+
+    <div id="add-modal" class="add-modal">
+      <div id="add-friend" class="add-friend">
+        <div><i class="bi bi-person-fill-add add-person"></i></div>
+        <h2>フレンド申請</h2>
+        <div class="add-container">
+          <div class="friend-search">
+            <form name="friend-search-form" id="friend-search-form">
+              <input
+                id="input-email"
+                class="input-email"
+                type="email"
+                placeholder="Email"
+                name="email"
+              />
+              <button type="submit" class="search-button" id="friend-serach">
+                <i class="bi bi-search"></i>
+              </button>
+            </form>
+          </div>
+          <!-- フレンド申請 -->
+          <div id="searched-user"></div>
+          <button
+            id="friend-request-button"
+            type="submit"
+            style="display: none"
+          >
+            申請
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="request-modal" class="request-modal">
+      <div id="accept-group" class="accept-group">
+        <div><i class="bi bi-person-fill request-person"></i></div>
+        <h2>フレンド申請一覧</h2>
+        <div class="request-container">
+          <div id="request-result"></div>
+          <div class="friend-request">
+            <select
+              name="request-all"
+              class="friend-all"
+              id="friend-request"
+              size="999"
+            ></select>
+            <div class="all-button" id="all-button" style="display: none">
+              <button type="submit" class="accept-button" id="accept-button">
+                承認
+              </button>
+              <button type="submit" class="deny-button" id="deny-button">
+                拒否
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      // prettier-ignore
+      const channels = JSON.parse('{{ channels|tojson }}');
+      // prettier-ignore
+      const user_id = JSON.parse('{{ user_id|tojson }}');
+    </script>
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/modalJS/add-friend.js')}}"
+    ></script>
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/modalJS/accept-friend.js')}}"
+    ></script>
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/modalJS/add-public.js')}}"
+    ></script>
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/search.js')}}"
+    ></script>
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/scroll-message.js')}}"
+    ></script>
+    <script
+      type="text/javascript"
+      async
+      src="{{url_for('static',filename='js/flaskMessage.js')}}"
+    ></script>
+  </body>
+</html>
