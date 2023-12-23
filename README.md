@@ -1,7 +1,28 @@
 # ChatApp in Hackathon
 
+# About
 
+ハッカソンでチャットアプリを作成しました。Notionで作業状況を管理しました。
 
+## Concepts
+既存のチャットアプリを使う中で感じた、こういう機能があったらいいなというものを形にした。
+具体的には、チャットアプリで重要な情報を共有したときに、タイムラインの上位に流れてしまって、後から情報を探しづらいと実際に自分が感じていた。
+
+## MY Role
+私は全体を見つつ、メインはバックエンドを担当しました。
+ - テーブル設計
+ - APIの作成
+ - フロントエンドからのAPI接続
+
+# Document(Excerpt)
+<img src="https://github.com/mizuki-sleeper/hackathon/assets/125140248/499e7ff1-09fe-4f2b-9501-f78fe48309ab" alt="001"/></td>
+<img src="https://github.com/mizuki-sleeper/hackathon/assets/125140248/5d80aa8c-ff9f-49cd-9e1b-a1591b35f033" alt="002"/></td>
+<img src="https://github.com/mizuki-sleeper/hackathon/assets/125140248/09f8b7a6-1dcd-4305-a49f-cdc100598daf" alt="003"/></td>
+<img src="https://github.com/mizuki-sleeper/hackathon/assets/125140248/39857985-e449-421b-829d-5b8f72155383" alt="004"/></td>
+<img src="https://github.com/mizuki-sleeper/hackathon/assets/125140248/b3dbc07e-3b75-4e4a-9c69-c2f83dcc9e63" alt="005"/></td>
+<img src="https://github.com/mizuki-sleeper/hackathon/assets/125140248/26b32801-d453-4d68-8229-86004889ec62" alt="006"/></td>
+
+# DEMO
 <table>
   <tr>
     <td><img src="https://github.com/mizuki-sleeper/hackathon/assets/125140248/3a43057d-7bee-47e8-8bab-33c3b41d7e7d" alt="01"/></td>
